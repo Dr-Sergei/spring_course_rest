@@ -4,9 +4,11 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.beans.PropertyVetoException;
+import java.util.Properties;
 
 @Configuration
 @ComponentScan(basePackages = "com.sergei.spring.rest")
@@ -14,7 +16,7 @@ import java.beans.PropertyVetoException;
 public class MyConfig {
 
     @Bean
-    public ComboPooledDataSource dataSource(){
+    public ComboPooledDataSource dataSource() {
         ComboPooledDataSource dataSource = new ComboPooledDataSource();
         try {
             dataSource.setDriverClass("com.mysql.cj.jdbc.Driver");
@@ -26,5 +28,19 @@ public class MyConfig {
         }
 
         return dataSource;
+    }
+
+    @Bean
+    public LocalSessionFactoryBean sessionFactoryBean() {
+        sessionFactoryBean().setDataSource(dataSource());
+        sessionFactoryBean().setPackagesToScan("com.sergei.spring.rest.entity");
+        Properties hibernateProperties = new Properties();
+        hibernateProperties.setProperty("hibernate.dialect",
+                "org.hibernate.dialect.MySQLDialect");
+        hibernateProperties.setProperty("hibernate.show_sql",
+                "true");
+        sessionFactoryBean().setHibernateProperties(hibernateProperties);
+        return sessionFactoryBean();
+
     }
 }
