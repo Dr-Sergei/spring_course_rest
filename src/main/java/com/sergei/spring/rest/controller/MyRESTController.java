@@ -30,7 +30,7 @@ public class MyRESTController {
     public Object getEmployee(@PathVariable int id) throws JsonProcessingException {
         Employee employee = employeeService.getEmployee(id);
         if (employee == null) {
-            throw new NoSuchEmployeeException("There is no employee with ID= " + id + "in Database!");
+            throw new NoSuchEmployeeException("There is no employee with ID= " + id + " in Database!");
         }
         return employee;
     }
@@ -45,5 +45,12 @@ public class MyRESTController {
         return new ResponseEntity<>(employeeIncorrectData, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler
+    public ResponseEntity<EmployeeIncorrectData> handleException(Exception exception) {
 
+        EmployeeIncorrectData data = new EmployeeIncorrectData();
+        data.setInfo(exception.getMessage());
+
+        return new ResponseEntity<>(data, HttpStatus.BAD_REQUEST);
+    }
 }
