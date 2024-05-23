@@ -24,11 +24,17 @@ public class MyRESTController {
     }
 
     @GetMapping("/employees/{id}")
-    public Object getEmployee(@PathVariable int id) throws JsonProcessingException {
+    public Employee getEmployee(@PathVariable int id) throws JsonProcessingException {
         Employee employee = employeeService.getEmployee(id);
         if (employee == null) {
             throw new NoSuchEmployeeException("There is no employee with ID= " + id + " in Database!");
         }
+        return employee;
+    }
+
+    @PostMapping("/employees")
+    public Employee addEmployee(@RequestBody Employee employee) {
+        employeeService.saveNewEmployee(employee);
         return employee;
     }
 }
