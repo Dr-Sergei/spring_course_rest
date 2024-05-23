@@ -32,9 +32,25 @@ public class MyRESTController {
         return employee;
     }
 
+    //adding an employee
     @PostMapping("/employees")
     public Employee addEmployee(@RequestBody Employee employee) {
         employeeService.saveNewEmployee(employee);
         return employee;
+    }
+
+    //updating an employee
+    @PutMapping("/employees")
+    public Employee updateEmployee(@RequestBody Employee employee) {
+        employeeService.saveNewEmployee(employee);
+        return employee;
+    }
+
+    //removing an employee
+    @DeleteMapping("/employees/{id}")
+    public String deleteEmployee(@PathVariable int id){
+        employeeService.deleteEmployee(id);
+
+        return "Employee with id=" + id + " was successfully fired!";
     }
 }
